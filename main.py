@@ -18,19 +18,55 @@ pprint(my_cook_book())
 
 
 def get_shop_list_by_dishes(dishes, person_count):
-    ingr_dict = {}
+    ing_dict = {}
     for i in dishes:
         for ingredient in my_cook_book()[i]:
             name = ingredient['ingredient_name']
-            if name in ingr_dict:
-                ingr_dict[name] = {'measure': ingredient['measure'],
-                                   'quantity': int(ingredient['quantity'] + (
-                                           ingr_dict[name]['quantity'] / person_count)) * person_count}
+            if name in ing_dict:
+                ing_dict[name] = {'measure': ingredient['measure'],
+                                  'quantity': int(ingredient['quantity'] + (
+                                          ing_dict[name]['quantity'] / person_count)) * person_count}
             else:
-                ingr_dict[name] = {'measure': ingredient['measure'],
-                                   'quantity': ingredient['quantity'] * person_count}
+                ing_dict[name] = {'measure': ingredient['measure'],
+                                  'quantity': ingredient['quantity'] * person_count}
 
-    return ingr_dict
+    return ing_dict
 
 
 pprint(get_shop_list_by_dishes(['Фахитос', 'Омлет'], 2))
+
+
+def read_file(file):
+    with open(file, encoding='utf-8') as f:
+        text = f.readlines()
+    return text
+
+
+list_files = ['1.txt', '2.txt', '3.txt']
+
+
+def read_files(files):
+    list_text = []
+    for element in files:
+        with open(element, encoding='utf-8') as f:
+            text = f.readlines()
+            list_text.append([len(text), element, text])
+    list_text.sort()
+    return list_text
+
+
+
+
+def create_new_file(list_text: list, new_file):
+    with open(new_file, 'w', encoding='utf-8') as f:
+        for element in list_text:
+            f.write(element[1] + '\n')
+            f.write(str(element[0]) + '\n')
+            for el in element[2]:
+                if '\n' in el:
+                    f.write(el.lstrip())
+                else:
+                    f.write(el.lstrip() + '\n')
+
+
+create_new_file(read_files(list_files), 'main.txt')
